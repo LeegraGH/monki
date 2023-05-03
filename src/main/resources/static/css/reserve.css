@@ -1,0 +1,17 @@
+.form-reserve {
+    width: 100%;
+    max-width: 330px;
+    padding: 15px;
+    margin: auto;
+}
+
+.form-reserve form{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-reserve form input{
+    padding: 10px;
+    border-radius: 10px;
+}

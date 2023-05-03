@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="ru" class="h-100" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.108.0">
+  <script src="https://kit.fontawesome.com/563ce4d2d7.js" crossorigin="anonymous"></script>
+  <title>Monki | Панель администратора</title>
+  <link th:replace="~{base :: favicon}">
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/cover/">
+  <link th:href="@{../css/bootstrap.min.css}" href="../static/css/bootstrap.min.css" rel="stylesheet">
+  <link th:href="@{../css/style.css}" href="../static/css/style.css" rel="stylesheet">
+  <style>
+    html,
+    body {
+      height: 100%;
+    }
+
+    body{
+      text-shadow: none;
+    }
+
+    main{
+      margin-top: 30px;
+    }
+
+    .add_category__block {
+      width: 100%;
+      max-width: 400px;
+      padding: 15px;
+      margin: auto;
+    }
+
+    .form__add_category{
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form__add_category input, .form__add_product textarea{
+      padding: 5px;
+      border-radius: 10px;
+    }
+
+    .form__add_category label{
+        color: rgba(0, 0, 0, 0.66);
+    }
+
+    .form__add_category .form-floating:focus-within {
+        z-index: 2;
+    }
+  </style>
+</head>
+<body class="d-flex text-center text-bg-dark">
+<div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+  <header th:replace="~{base :: copy_header}"></header>
+
+  <main class="px-3">
+    <h3>Добавление категории</h3>
+    <div class="add_category__block">
+      <form class="form__add_category" id="add_category" th:action="@{/admin/add_category}" th:object="${categoryForm}" th:method="post">
+        <div class="form-floating">
+          <input class="form-control" type="text" th:field="*{name}" id="name" name="name" placeholder="Название" required>
+          <label for="name">Название</label>
+        </div>
+        <button class="w-100 btn btn-lg btn-light" type="submit">Добавить</button>
+      </form>
+    </div>
+  </main>
+
+  <footer th:replace="~{base :: copy_footer}"></footer>
+</div>
+</body>
+</html>

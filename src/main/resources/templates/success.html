@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ru" class="h-100" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org/">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="">
+  <meta name="author" content="Mark Otto, Jacob Thornton, and Bootstrap contributors">
+  <meta name="generator" content="Hugo 0.108.0">
+  <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+  <script src="https://kit.fontawesome.com/563ce4d2d7.js" crossorigin="anonymous"></script>
+  <title>Monki</title>
+  <link th:replace="~{ base :: favicon}">
+  <link rel="canonical" href="https://getbootstrap.com/docs/5.3/examples/cover/">
+  <link th:href="@{../css/bootstrap.min.css}" href="../static/css/bootstrap.min.css" rel="stylesheet">
+  <link th:href="@{../css/style.css}" href="../static/css/style.css" rel="stylesheet">
+  <style>
+    .success__message{
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+  </style>
+</head>
+<body class="d-flex h-100 text-center text-bg-dark">
+  <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
+    <header th:replace="~{base :: copy_header}"></header>
+    <main class="px-3">
+      <div class="success__message">
+        <h3>Заявка на бронирование успешно отправлена!</h3>
+        <p class="lead">Мы Вам перезвоним <i class="fa-solid fa-face-smile"></i></p>
+        <p class="lead">
+          <a th:href="@{/}" class="btn btn-lg btn-light fw-bold border-white bg-white">Вернуться на главную</a>
+        </p>
+      </div>
+    </main>
+    <footer th:replace="~{base :: copy_footer}"></footer>
+  </div>
+</body>
+</html>
