@@ -38,4 +38,11 @@ public class Product {
     public Long getImageId(){
         return image.getId();
     }
+
+    public Product(String title, String description, int weight, int price) {
+        this.title = title;
+        this.description = description;
+        this.weight = weight;
+        this.price = price;
+    }
 }

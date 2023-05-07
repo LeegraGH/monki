@@ -1,6 +1,5 @@
 package com.example.monki.services;
 
-import com.example.monki.models.Category;
 import com.example.monki.models.Order;
 import com.example.monki.repositories.OrderRepository;
 import lombok.RequiredArgsConstructor;

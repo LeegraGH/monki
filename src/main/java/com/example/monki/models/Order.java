@@ -31,5 +31,14 @@ public class Order {
     private int amount;
     @ElementCollection
     private List<String> information;
+
+    public Order(String name, String phone, String address, String comment, String payment, int amount) {
+        this.name = name;
+        this.phone = phone;
+        this.address = address;
+        this.comment = comment;
+        this.payment = payment;
+        this.amount = amount;
+    }
 }
 
