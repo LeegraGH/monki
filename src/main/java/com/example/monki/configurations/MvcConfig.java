@@ -1,4 +1,4 @@
-package com.example.monki.config;
+package com.example.monki.configurations;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;

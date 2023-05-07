@@ -1,4 +1,4 @@
-package com.example.monki.config;
+package com.example.monki.configurations;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
