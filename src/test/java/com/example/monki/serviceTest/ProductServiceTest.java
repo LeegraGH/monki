@@ -1,6 +1,7 @@
 package com.example.monki.serviceTest;
 
 import com.example.monki.models.Product;
+import com.example.monki.repositories.ImageRepository;
 import com.example.monki.repositories.ProductRepository;
 import com.example.monki.services.ProductService;
 import org.junit.jupiter.api.BeforeEach;
@@ -22,13 +23,15 @@ class ProductServiceTest {
 
     @Mock
     private ProductRepository productRepository;
+    @Mock
+    private ImageRepository imageRepository;
 
     private ProductService productService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        productService = new ProductService(productRepository);
+        productService = new ProductService(productRepository, imageRepository);
     }
 
     @Test
@@ -53,7 +56,8 @@ class ProductServiceTest {
     void saveProduct() throws IOException {
         // given
         Product product = new Product("New Product", "New Description", 30,30);
-        MockMultipartFile file = new MockMultipartFile("image", "image.jpg", "image/jpeg", "test image".getBytes());
+        MockMultipartFile file = new MockMultipartFile("image", "image.jpg",
+                "image/jpeg", "test image".getBytes());
         when(productRepository.existsByTitle(product.getTitle())).thenReturn(false);
 
         // when

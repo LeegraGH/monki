@@ -2,6 +2,7 @@ package com.example.monki.services;
 
 import com.example.monki.models.Image;
 import com.example.monki.models.Product;
+import com.example.monki.repositories.ImageRepository;
 import com.example.monki.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -17,6 +18,7 @@ import java.util.List;
 public class ProductService {
 
     private final ProductRepository productRepository;
+    private final ImageRepository imageRepository;
 
     public List<Product> listProducts() {
         return productRepository.findAll();
@@ -42,6 +44,25 @@ public class ProductService {
             log.info("Saving new product '{}'", product.getTitle());
             productRepository.save(product);
         }
+    }
+
+    public void changeProduct(Long id, Product product, MultipartFile file) throws IOException {
+        Product updateProduct = productRepository.findById(id).orElse(null);
+        Image image;
+        if (file.getSize() != 0) {
+            assert updateProduct != null;
+            imageRepository.deleteById(updateProduct.getImage().getId());
+            image = toImageEntity(file);
+            updateProduct.addImage(image);
+        }
+        assert updateProduct != null;
+        updateProduct.setPrice(product.getPrice());
+        updateProduct.setCategory(product.getCategory());
+        updateProduct.setTitle(product.getTitle());
+        updateProduct.setDescription(product.getDescription());
+        updateProduct.setWeight(product.getWeight());
+        log.info("Updating product '{}'", updateProduct.getTitle());
+        productRepository.save(updateProduct);
     }
 
     public void deleteProduct(Long id) {
