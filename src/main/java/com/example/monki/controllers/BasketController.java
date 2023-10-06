@@ -79,9 +79,7 @@ public class BasketController {
     public String deleteProduct(@PathVariable Long id, HttpSession session) {
         Basket basket = getBasket(session);
         basket.deleteProduct(id);
-        Product product = productService.getProductById(id);
-        int cntWarehouse = warehouseService.getCountOfProduct(product);
-        if (cntWarehouse==0){
+        if (basket.getProducts().isEmpty()){
             basket.setSuccess(true);
         }
         saveBasket(basket, session);
@@ -104,11 +102,6 @@ public class BasketController {
     public String lessProduct(@PathVariable Long id, HttpSession session) {
         Basket basket = getBasket(session);
         basket.oneLessProduct(id);
-        Product product = productService.getProductById(id);
-        int cntWarehouse = warehouseService.getCountOfProduct(product);
-        if (cntWarehouse>=(int)basket.getProduct(product).get(1)){
-            basket.setSuccess(true);
-        }
         saveBasket(basket, session);
         return "redirect:/basket";
     }
