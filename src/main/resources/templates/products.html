@@ -134,7 +134,9 @@
                                                 </form>
                                             </div>
                                             <form id="trash" th:unless="${#authorization.expression('hasAuthority(''ROLE_ADMIN'')')}" th:action="@{/basket/add/{id}(id=${product.getId()})}" method="post">
-                                                <button type="submit" class="btn btn-sm btn-outline-secondary">В корзину</button>
+                                                <button type="submit" class="btn btn-sm btn-outline-secondary" th:if="${product.getWarehouse().getCount()>0}">В корзину</button>
+                                                <div style="margin-top: 10px; color: black" th:if="${product.getWarehouse().getCount()==0}"><strong>Нет в наличии</strong></div>
+<!--                                                <button type="submit" class="btn btn-sm btn-outline-secondary" disabled th:if="${product.getWarehouse().getCount()==0}">В корзину</button>-->
                                             </form>
                                         </div>
                                     </div>

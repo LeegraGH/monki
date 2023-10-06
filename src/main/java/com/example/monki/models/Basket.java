@@ -14,6 +14,20 @@ public class Basket {
     private List<List<Object>> products = new ArrayList<>();
     private int amount = 0;
     private int quantity = 0;
+    private Boolean success = true;
+
+    public List<Object> getProduct(Product product){
+        for(List<Object> objects : products){
+            Product prod = (Product) objects.get(0);
+            if (prod.getId().equals(product.getId())){
+                return objects;
+            }
+        }
+        List<Object> prod = new ArrayList<>();
+        prod.add(product);
+        prod.add(0);
+        return prod;
+    }
 
     public void addProduct(Product product) {
         for (List<Object> objects : products) {
@@ -25,6 +39,7 @@ public class Basket {
                 return;
             }
         }
+
         List<Object> newProduct = new ArrayList<>();
         newProduct.add(product);
         newProduct.add(1);

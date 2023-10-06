@@ -13,6 +13,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
@@ -37,11 +38,26 @@ public class BasketController {
                         HttpSession session) {
         order.setInformation(new ArrayList<>());
         order.setAmount(basket.getAmount());
-        for (int i = 0; i < basket.getProducts().size(); i++){
-            Product product = (Product)basket.getProducts().get(i).get(0);
-            order.getInformation().add(product.getTitle());
+
+        for (List<Object> objects : basket.getProducts()){
+            Product product = (Product) objects.get(0);
+            int cntProduct = (int) objects.get(1);
+            int cntWarehouse = warehouseService.getCountOfProduct(product);
+            if (cntProduct>cntWarehouse){
+                basket.setSuccess(false);
+                return "redirect:/basket";
+            }
         }
+
+        for (List<Object> objects : basket.getProducts()){
+            Product product = (Product) objects.get(0);
+            int count = (int) objects.get(1);
+            warehouseService.reduceProduct(product, count);
+            order.getInformation().add(product.getTitle()+": количество позиций - "+count);
+        }
+
         orderService.saveOrder(order);
+        basket.setSuccess(true);
         session.invalidate();
         return "redirect:/order/complete";
     }
@@ -51,24 +67,22 @@ public class BasketController {
         Basket basket = getBasket(session);
         Product product = productService.getProductById(id);
         int count = warehouseService.getCountOfProduct(product);
-        if (count > 0){
+        if (count > (int)basket.getProduct(product).get(1)){
             basket.addProduct(product);
-            warehouseService.reduceProduct(product);
             saveBasket(basket, session);
         }
+
         return "redirect:/products";
     }
 
     @PostMapping("/basket/delete/{id}")
     public String deleteProduct(@PathVariable Long id, HttpSession session) {
         Basket basket = getBasket(session);
-
-        Product product = productService.getProductById(id);
-        int count = warehouseService.getCountOfProduct(product);
-        int cntBasket = basket.getQuantity();
         basket.deleteProduct(id);
-        if (cntBasket!=basket.getQuantity()) {
-            warehouseService.increaseProduct(product);
+        Product product = productService.getProductById(id);
+        int cntWarehouse = warehouseService.getCountOfProduct(product);
+        if (cntWarehouse==0){
+            basket.setSuccess(true);
         }
         saveBasket(basket, session);
         return "redirect:/basket";
@@ -79,9 +93,8 @@ public class BasketController {
         Basket basket = getBasket(session);
         Product product = productService.getProductById(id);
         int count = warehouseService.getCountOfProduct(product);
-        if (count > 0){
+        if (count > (int)basket.getProduct(product).get(1)){
             basket.oneMoreProduct(id);
-            warehouseService.reduceProduct(product);
             saveBasket(basket, session);
         }
         return "redirect:/basket";
@@ -90,12 +103,11 @@ public class BasketController {
     @PostMapping("/basket/less/{id}")
     public String lessProduct(@PathVariable Long id, HttpSession session) {
         Basket basket = getBasket(session);
-        Product product = productService.getProductById(id);
-        int count = warehouseService.getCountOfProduct(product);
-        int cntBasket = basket.getQuantity();
         basket.oneLessProduct(id);
-        if (cntBasket!=basket.getQuantity()) {
-            warehouseService.increaseProduct(product);
+        Product product = productService.getProductById(id);
+        int cntWarehouse = warehouseService.getCountOfProduct(product);
+        if (cntWarehouse>=(int)basket.getProduct(product).get(1)){
+            basket.setSuccess(true);
         }
         saveBasket(basket, session);
         return "redirect:/basket";
@@ -105,6 +117,7 @@ public class BasketController {
     public String deleteAllProducts(HttpSession session) {
         Basket basket = getBasket(session);
         basket.deleteAllProducts();
+        basket.setSuccess(true);
         saveBasket(basket, session);
         return "redirect:/basket";
     }
@@ -114,6 +127,7 @@ public class BasketController {
         if (basket == null) {
             basket = new Basket();
             session.setAttribute(BASKET_SESSION_KEY, basket);
+            session.setMaxInactiveInterval(180);
         }
         return basket;
     }

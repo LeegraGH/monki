@@ -86,7 +86,7 @@
                             <button style="padding: 0" type="submit">Очистить</button>
                         </form>
                     </li>
-                    <li class="list-group-item d-flex justify-content-between lh-sm"
+                    <li class="list-group-item d-flex justify-content-between gap-1 lh-sm"
                         th:each="product : ${basket.getProducts()}">
                         <div class="item_info">
                             <h6 class="my-0" th:text="${product[0].getTitle()}"></h6>
@@ -150,6 +150,7 @@
                         <label class="form-check-label" for="cash">Оплата наличными при получении</label>
                     </div>
                     <button class="w-100 btn btn-lg btn-light" type="submit" th:if="${!basket.getProducts().isEmpty()}">Оформить заказ</button>
+                    <span style="color: #c20404" th:if="${!basket.getSuccess()}">Оформить заказ невозможно, некоторых товаров нет в наличии.</span>
                     <button class="w-100 btn btn-lg btn-light" type="submit" disabled th:if="${basket.getProducts().isEmpty()}">Оформить заказ</button>
                 </form>
             </div>
