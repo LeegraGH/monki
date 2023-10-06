@@ -11,23 +11,67 @@ import java.util.Objects;
 @Data
 @NoArgsConstructor
 public class Basket {
-    private List<Product> products = new ArrayList<>();
+    private List<List<Object>> products = new ArrayList<>();
     private int amount = 0;
     private int quantity = 0;
 
     public void addProduct(Product product) {
-        products.add(product);
+        for (List<Object> objects : products) {
+            Product prod = (Product) objects.get(0);
+            if (prod.getId().equals(product.getId())) {
+                objects.add(1, (int) objects.get(1) + 1);
+                quantity += 1;
+                amount += product.getPrice();
+                return;
+            }
+        }
+        List<Object> newProduct = new ArrayList<>();
+        newProduct.add(product);
+        newProduct.add(1);
+        products.add(newProduct);
         quantity += 1;
         amount += product.getPrice();
     }
 
     public void deleteProduct(Long id) {
-        for (Product product : products) {
-            if (Objects.equals(product.getId(), id)) {
-                amount -= product.getPrice();
+        for (List<Object> objects : products) {
+            Product prod = (Product) objects.get(0);
+            if ((Objects.equals(prod.getId(), id))) {
+                amount -= (int) objects.get(1)*prod.getPrice();
+                quantity -= (int) objects.get(1);
+                products.remove(objects);
+                return;
+            }
+        }
+    }
+
+    public void deleteAllProducts() {
+        products.clear();
+        amount = 0;
+        quantity = 0;
+    }
+
+    public void oneMoreProduct(Long id) {
+        for (List<Object> objects : products) {
+            Product prod = (Product) objects.get(0);
+            if ((Objects.equals(prod.getId(), id))) {
+                amount += prod.getPrice();
+                quantity += 1;
+                objects.add(1, (int) objects.get(1) + 1);
+                return;
+            }
+        }
+    }
+
+    public void oneLessProduct(Long id) {
+        for (List<Object> objects : products) {
+            Product prod = (Product) objects.get(0);
+            if ((Objects.equals(prod.getId(), id))) {
+                if ((int)objects.get(1)==1) return;
+                amount -= prod.getPrice();
                 quantity -= 1;
-                products.remove(product);
-                break;
+                objects.add(1, (int) objects.get(1) - 1);
+                return;
             }
         }
     }
