@@ -22,25 +22,13 @@
       text-shadow: none;
     }
 
-    .product__item{
-      height: 100%;
-    }
-
-    .category__title{
-      margin: 60px 0 30px 0;
-      text-align: left;
-    }
-
-    .card{
-      width: 100%;
-      height: 100%;
-    }
-
-    .card-body{
+    .wrapper {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      gap: 20px;
+      min-height: 100vh;
+    }
+    .top {
+      flex-grow: 1;
     }
 
     .card-body img{
@@ -48,14 +36,6 @@
       height: auto;
       border-radius: 5px;
       margin-bottom: 10px;
-    }
-
-    .card-text{
-      margin-bottom: 5px;
-    }
-
-    .dropdown-item{
-      text-align: center;
     }
 
     .arrow_block{
@@ -71,51 +51,44 @@
       font-size: 24px;
     }
 
-    .card__change{
-      display: flex;
-      flex-direction: row;
-      gap: 10px;
-      justify-content: center;
-      flex-wrap: wrap;
-    }
   </style>
 </head>
 <body class="text-bg-dark">
 
-<div class="cover-container d-flex p-3 mx-auto flex-column">
-  <header th:replace="~{base :: copy_header}"></header>
-
-  <main>
-
-    <section class="py-5 container">
-      <div class="row py-lg-5">
-        <div class="col-lg-6 col-md-8 mx-auto">
-          <h1 class="fw-light text-center">Склад</h1>
+<div class="cover-container d-flex p-3 mx-auto flex-column wrapper">
+  <div class="top">
+    <header th:replace="~{base :: copy_header}"></header>
+    <main>
+      <section class="py-5 container">
+        <div class="row py-lg-5">
+          <div class="col-lg-6 col-md-8 mx-auto">
+            <h1 class="fw-light text-center">Склад</h1>
+          </div>
         </div>
-      </div>
-      <div class="row">
-        <div class="col-lg-6 col-md-8 mx-auto">
-          <table class="table table-dark table-hover">
-            <thead>
-            <tr>
-              <th scope="col">Продукт</th>
-              <th scope="col">Количество</th>
-              <th scope="col"></th>
-            </tr>
-            </thead>
-            <tbody class="table-group-divider">
+        <div class="row">
+          <div class="col-lg-6 col-md-8 mx-auto">
+            <table class="table table-dark table-hover">
+              <thead>
+              <tr>
+                <th scope="col">Продукт</th>
+                <th scope="col">Количество</th>
+                <th scope="col"></th>
+              </tr>
+              </thead>
+              <tbody class="table-group-divider">
               <tr th:each="product : ${warehouse}">
                 <td th:text="${product.getProduct().getTitle()}">Bread</td>
                 <td th:text="${product.getCount()}">20</td>
                 <td><a th:href="@{/warehouse/add/{id}(id=${product.getId()})}"><i style="color: white" class="fa-solid fa-plus-minus"></i></a></td>
               </tr>
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
+    </main>
+  </div>
 
-  </main>
   <footer class="text-muted py-5 mt-auto text-white-50 text-center">
     <div class="container">
       <p class="float-end mb-1 arrow_block">
