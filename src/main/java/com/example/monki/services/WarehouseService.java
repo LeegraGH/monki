@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Slf4j
@@ -18,6 +19,17 @@ public class WarehouseService {
 
     public List<Warehouse> listProducts () {
         return warehouseRepository.findAll();
+    }
+
+    public Warehouse getWarehouseById(Long id) {
+        return warehouseRepository.findById(id).orElse(null);
+    }
+
+    public void changeWarehouse(Long id, Warehouse warehouse){
+        Warehouse updateWarehouse = warehouseRepository.findById(id).orElse(null);
+        assert updateWarehouse != null;
+        updateWarehouse.setCount(warehouse.getCount());
+        warehouseRepository.save(updateWarehouse);
     }
 
     public Integer getCountOfProduct(Product product){

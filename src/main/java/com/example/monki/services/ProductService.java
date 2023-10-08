@@ -2,8 +2,10 @@ package com.example.monki.services;
 
 import com.example.monki.models.Image;
 import com.example.monki.models.Product;
+import com.example.monki.models.Warehouse;
 import com.example.monki.repositories.ImageRepository;
 import com.example.monki.repositories.ProductRepository;
+import com.example.monki.repositories.WarehouseRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ public class ProductService {
 
     private final ProductRepository productRepository;
     private final ImageRepository imageRepository;
+    private final WarehouseRepository warehouseRepository;
 
     public List<Product> listProducts() {
         return productRepository.findAll();
@@ -43,6 +46,7 @@ public class ProductService {
             }
             log.info("Saving new product '{}'", product.getTitle());
             productRepository.save(product);
+            warehouseRepository.save(new Warehouse(product, 0));
         }
     }
 

@@ -14,9 +14,14 @@ public class Warehouse {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "id")
     private Long id;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "product")
     private Product product;
     @Column(name = "count")
     private int count;
+
+    public Warehouse(Product product, int count) {
+        this.product=product;
+        this.count=count;
+    }
 }
