@@ -26,6 +26,7 @@ public class Basket {
         List<Object> prod = new ArrayList<>();
         prod.add(product);
         prod.add(0);
+        prod.add(true);
         return prod;
     }
 
@@ -43,9 +44,30 @@ public class Basket {
         List<Object> newProduct = new ArrayList<>();
         newProduct.add(product);
         newProduct.add(1);
+        newProduct.add(true);
         products.add(newProduct);
         quantity += 1;
         amount += product.getPrice();
+    }
+
+    public void setFalseProduct(Long id){
+        for (List<Object> objects : products) {
+            Product prod = (Product) objects.get(0);
+            if ((Objects.equals(prod.getId(), id))) {
+                objects.add(2, false);
+                return;
+            }
+        }
+    }
+
+    public void setTrueProduct(Long id){
+        for (List<Object> objects : products) {
+            Product prod = (Product) objects.get(0);
+            if ((Objects.equals(prod.getId(), id))) {
+                objects.add(2, true);
+                return;
+            }
+        }
     }
 
     public void deleteProduct(Long id) {

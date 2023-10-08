@@ -27,6 +27,17 @@ public class BasketController {
     @GetMapping("/basket")
     public String showBasket(Model model, HttpSession session) {
         Basket basket = getBasket(session);
+        boolean check = false;
+        for (List<Object> objects : basket.getProducts()){
+            Product product = (Product) objects.get(0);
+            int cntProduct = (int) objects.get(1);
+            int cntWarehouse = warehouseService.getCountOfProduct(product);
+            if (cntProduct>cntWarehouse){
+                check=true;
+                basket.setFalseProduct(product.getId());
+            } else basket.setTrueProduct(product.getId());
+        }
+        basket.setSuccess(!check);
         model.addAttribute("basket", basket);
         model.addAttribute("orderForm", new Order());
         return "basket";
@@ -39,14 +50,20 @@ public class BasketController {
         order.setInformation(new ArrayList<>());
         order.setAmount(basket.getAmount());
 
+        boolean check = false;
         for (List<Object> objects : basket.getProducts()){
             Product product = (Product) objects.get(0);
             int cntProduct = (int) objects.get(1);
             int cntWarehouse = warehouseService.getCountOfProduct(product);
             if (cntProduct>cntWarehouse){
-                basket.setSuccess(false);
-                return "redirect:/basket";
+                check=true;
+                basket.setFalseProduct(product.getId());
             }
+        }
+
+        if (check){
+            basket.setSuccess(false);
+            return "redirect:/basket";
         }
 
         for (List<Object> objects : basket.getProducts()){
@@ -79,9 +96,9 @@ public class BasketController {
     public String deleteProduct(@PathVariable Long id, HttpSession session) {
         Basket basket = getBasket(session);
         basket.deleteProduct(id);
-        if (basket.getProducts().isEmpty()){
-            basket.setSuccess(true);
-        }
+//        if (basket.getProducts().isEmpty()){
+//            basket.setSuccess(true);
+//        }
         saveBasket(basket, session);
         return "redirect:/basket";
     }
@@ -102,6 +119,12 @@ public class BasketController {
     public String lessProduct(@PathVariable Long id, HttpSession session) {
         Basket basket = getBasket(session);
         basket.oneLessProduct(id);
+        List <Object> product = basket.getProduct(productService.getProductById(id));
+        int cntProduct = (int) product.get(1);
+        int cntWarehouse = warehouseService.getCountOfProduct((Product) product.get(0));
+        if (cntProduct<=cntWarehouse){
+            basket.setTrueProduct(id);
+        }
         saveBasket(basket, session);
         return "redirect:/basket";
     }
@@ -110,7 +133,7 @@ public class BasketController {
     public String deleteAllProducts(HttpSession session) {
         Basket basket = getBasket(session);
         basket.deleteAllProducts();
-        basket.setSuccess(true);
+//        basket.setSuccess(true);
         saveBasket(basket, session);
         return "redirect:/basket";
     }
@@ -120,7 +143,7 @@ public class BasketController {
         if (basket == null) {
             basket = new Basket();
             session.setAttribute(BASKET_SESSION_KEY, basket);
-            session.setMaxInactiveInterval(180);
+            session.setMaxInactiveInterval(300);
         }
         return basket;
     }

@@ -77,7 +77,7 @@
     <header th:replace="~{base :: copy_header}"></header>
 
     <main class="px-3">
-      <h3>Учет количества продукта на складе</h3>
+      <h3 class="text-center">Учет количества продукта на складе</h3>
       <div class="add_product__block">
         <form class="form__add_product" id="add_product" th:object="${warehouseForm}"
               th:action="@{/warehouse/add/{id}(id=${warehouseForm.getId()})}" th:method="post">
